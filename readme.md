@@ -29,6 +29,7 @@ $❯ kill 31586
 Path | Description
 -|-
 `.editorconfig` | Formatting information. [⌘](https://editorconfig.org/)
+`.gitignore` | Ignore artifacts. [⌘](https://git-scm.com/docs/gitignore)
 `doc/*` | Documentation. [⌘](https://github.github.com/gfm/)
 `makefile` | Automation instructions. [⌘](https://www.gnu.org/software/make/manual/make.html)
 `readme.md` | Developer information. [⌘](https://github.github.com/gfm/)
