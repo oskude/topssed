@@ -68,6 +68,18 @@ void init_root_socket ()
 }
 
 /*******************************************************************************
+* send http header
+*/
+void send_http_header (int socket)
+{
+	fcntl(socket, F_SETFL, O_NONBLOCK);
+	send(socket, "HTTP/1.1 200 OK\n", 16, 0);
+	send(socket, "Access-Control-Allow-Origin: *\n", 31, 0);
+	send(socket, "Content-Type: text/event-stream;charset=utf-8\n", 47, 0);
+	send(socket, "\n", 1, 0);
+}
+
+/*******************************************************************************
 * press play on tape
 */
 int main ()
@@ -82,6 +94,7 @@ int main ()
 			(new_socket = accept(root_socket, NULL, NULL))
 			> 0
 		) {
+			send_http_header(new_socket);
 			close(new_socket);
 		}
 		usleep(1000);

@@ -10,12 +10,14 @@
 	[ "$output" = "active" ]
 }
 
-@test "program closes new connection" {
+@test "program sends sse header" {
 	run curl -sv http://127.0.0.1:53001
 	[ "$status" -eq 56 ]
-	[ "${lines[2]}" = "* Connected to 127.0.0.1 (127.0.0.1) port 53001 (#0)" ]
-	[ "${lines[8]}" = "* Recv failure: Connection reset by peer" ]
-	[ "${lines[9]}" = "* Closing connection 0" ]
+	[ "${lines[8]}" = "< HTTP/1.1 200 OK" ]
+	[ "${lines[9]}" = "< Access-Control-Allow-Origin: *" ]
+	[ "${lines[10]}" = "< Content-Type: text/event-stream;charset=utf-8" ]
+	[ "${lines[11]}" = "* Recv failure: Connection reset by peer" ]
+	[ "${lines[12]}" = "* Closing connection 0" ]
 }
 
 @test "program is still running" {
