@@ -21,7 +21,6 @@ $❯ kill 31586
 -|-|-|-
 [Bats](https://github.com/bats-core/bats-core) | ○ | ◉ | ○
 [GCC](https://www.gnu.org/software/gcc/) | ◉ | ○ | ○
-[Linux](https://www.kernel.org/) | ◉ | ◉ | ◉
 [make](https://www.gnu.org/software/make/) | ◉ | ◉ | ○
 [systemd](https://freedesktop.org/wiki/Software/systemd/) | ○ | ◉ | ◎
 
