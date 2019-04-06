@@ -3,14 +3,14 @@
 `topssed` is a Linux network _daemon_ that disconnects every new connection.
 
 ```
-❯ ./topssed &
+$❯ ./topssed &
 [1] 31586
 Listening at http://127.0.0.1:53001
 
-❯ curl http://127.0.0.1:53001
+$❯ curl http://127.0.0.1:53001
 curl: (56) Recv failure: Connection reset by peer
 
-❯ kill 31586
+$❯ kill 31586
 [1]+  Terminated              ./topssed
 ```
 
@@ -37,22 +37,22 @@ Path | Description
 # Build
 
 ```
-$ make
+$❯ make
 ```
 
 # Test
 
 ```
-$ make test
+$❯ make test
 ```
 
 # Run
 
 ```
-❯ systemd-run --user --unit="topssed-dev" ./topssed
+$❯ systemd-run --user --unit="topssed-dev" ./topssed
 Running as unit: topssed-dev.service
 
-❯ curl -v http://127.0.0.1:53001
+$❯ curl -v http://127.0.0.1:53001
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to 127.0.0.1 (127.0.0.1) port 53001 (#0)
@@ -65,5 +65,5 @@ Running as unit: topssed-dev.service
 * Closing connection 0
 curl: (56) Recv failure: Connection reset by peer
 
-❯ systemctl --user stop topssed-dev
+$❯ systemctl --user stop topssed-dev
 ```
