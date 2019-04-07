@@ -119,7 +119,7 @@ int main ()
 	while (1) {
 		if (
 			(new_socket = accept(root_socket, NULL, NULL))
-			> 0
+			> -1
 		) {
 			send_http_header(new_socket);
 			send_config(new_socket);
