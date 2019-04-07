@@ -7,28 +7,13 @@ $❯ ./topssed &
 [1] 31586
 Listening at http://127.0.0.1:53001
 
-$❯ curl -svm 1 http://127.0.0.1:53001
-*   Trying 127.0.0.1...
-* TCP_NODELAY set
-* Connected to 127.0.0.1 (127.0.0.1) port 53001 (#0)
-> GET / HTTP/1.1
-> Host: 127.0.0.1:53001
-> User-Agent: curl/7.64.1
-> Accept: */*
->
-< HTTP/1.1 200 OK
-< Access-Control-Allow-Origin: *
-< Content-Type: text/event-stream;charset=utf-8
-* no chunk, no close, no size. Assume close to signal end
-<
+$❯ curl -sm 1 http://127.0.0.1:53001
 event: config
 data: 100 2009681 4 4096
 
 event: hello
 data: world
 
-* Operation timed out after 1000 milliseconds with 66 bytes received
-* Closing connection 0
 
 $❯ kill 31586
 [1]+  Terminated              ./topssed
