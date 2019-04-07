@@ -1,15 +1,34 @@
 # Topssed
 
-`topssed` is a Linux network _daemon_ that sends [system information](/doc/data.out.md) to every new connection and closes the connection.
+`topssed` is a Linux network _daemon_ that streams [system information](/doc/data.out.md) over [server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html).
 
 ```
 $❯ ./topssed &
 [1] 31586
 Listening at http://127.0.0.1:53001
 
-$❯ curl -s http://127.0.0.1:53001
+$❯ curl -svm 1 http://127.0.0.1:53001
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 53001 (#0)
+> GET / HTTP/1.1
+> Host: 127.0.0.1:53001
+> User-Agent: curl/7.64.1
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+< Access-Control-Allow-Origin: *
+< Content-Type: text/event-stream;charset=utf-8
+* no chunk, no close, no size. Assume close to signal end
+<
 event: config
 data: 100 2009681 4 4096
+
+event: hello
+data: world
+
+* Operation timed out after 1000 milliseconds with 66 bytes received
+* Closing connection 0
 
 $❯ kill 31586
 [1]+  Terminated              ./topssed
@@ -54,7 +73,7 @@ $❯ make test
 $❯ systemd-run --user --unit="topssed-dev" ./topssed
 Running as unit: topssed-dev.service
 
-$❯ curl -sv http://127.0.0.1:53001 | cat
+$❯ curl -svm 1 http://127.0.0.1:53001 | cat
 *   Trying 127.0.0.1...
 * TCP_NODELAY set
 * Connected to 127.0.0.1 (127.0.0.1) port 53001 (#0)
@@ -68,11 +87,15 @@ $❯ curl -sv http://127.0.0.1:53001 | cat
 < Content-Type: text/event-stream;charset=utf-8
 * no chunk, no close, no size. Assume close to signal end
 <
-{ [40 bytes data]
-* Recv failure: Connection reset by peer
+{ [53 bytes data]
+* Operation timed out after 1000 milliseconds with 66 bytes received
 * Closing connection 0
 event: config
 data: 100 2009681 4 4096
+
+event: hello
+data: world
+
 
 $❯ systemctl --user stop topssed-dev
 ```

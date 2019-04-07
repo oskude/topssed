@@ -10,23 +10,24 @@
 	[ "$output" = "active" ]
 }
 
-@test "program closes connection" {
-	run curl -sv http://127.0.0.1:53001
-	[ "$status" -eq 56 ]
-}
-
 @test "program sends sse header" {
-	run curl -sv http://127.0.0.1:53001
+	run curl -svm 2 http://127.0.0.1:53001
 	[ "${lines[8]}" = "< HTTP/1.1 200 OK" ]
 	[ "${lines[9]}" = "< Access-Control-Allow-Origin: *" ]
 	[ "${lines[10]}" = "< Content-Type: text/event-stream;charset=utf-8" ]
 }
 
 @test "program sends config event and data" {
-	run curl -sv http://127.0.0.1:53001
+	run curl -svm 2 http://127.0.0.1:53001
 	[ "${lines[16]}" = "event: config" ]
 	# TODO: hmm, why cant we use "[0-9]+"? is there a substitute?
 	[ $(expr "${lines[17]}" : "data: [0-9]* [0-9]* [0-9]* [0-9]*") -ne 0 ]
+}
+
+@test "program sends hello event and data" {
+	run curl -svm 2 http://127.0.0.1:53001
+	[ "${lines[18]}" = "event: hello" ]
+	[ "${lines[19]}" = "data: world" ]
 }
 
 @test "program is still running" {

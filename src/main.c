@@ -10,8 +10,9 @@
 int         bind_port = 53001;
 const char *bind_host = "127.0.0.1";
 
-int new_socket;
-int root_socket;
+int new_socket = -1;
+int root_socket = -1;
+int current_socket = -1;
 
 /*******************************************************************************
 * clean up any mess that we might have left
@@ -22,6 +23,7 @@ void cleanup ()
 
 	close(new_socket);
 	close(root_socket);
+	close(current_socket);
 
 	exit(errno);
 }
@@ -68,6 +70,25 @@ void init_root_socket ()
 }
 
 /*******************************************************************************
+* send to `current_socket`, if that fails, close it...
+*/
+void send_or_close (
+	const void *buf,
+	size_t len
+) {
+	if (current_socket < 0) {
+		return;
+	}
+	if (
+		send(current_socket, buf, len, MSG_NOSIGNAL)
+		== -1
+	) {
+		close(current_socket);
+		current_socket = -1;
+	}
+}
+
+/*******************************************************************************
 * send http header
 */
 void send_http_header (int socket)
@@ -107,6 +128,16 @@ void send_config (int socket)
 }
 
 /*******************************************************************************
+* send system data
+*/
+void send_data ()
+{
+	send_or_close("event: hello\n", 13);
+	send_or_close("data: world\n", 12);
+	send_or_close("\n", 1);
+}
+
+/*******************************************************************************
 * press play on tape
 */
 int main ()
@@ -121,11 +152,15 @@ int main ()
 			(new_socket = accept(root_socket, NULL, NULL))
 			> -1
 		) {
-			send_http_header(new_socket);
-			send_config(new_socket);
-			close(new_socket);
+			close(current_socket);
+			current_socket = new_socket;
+			send_http_header(current_socket);
+			send_config(current_socket);
 		}
-		usleep(1000);
+		if (current_socket > -1) {
+			send_data();
+		}
+		usleep(1000 * 1000);
 	}
 
 	cleanup();

@@ -27,3 +27,17 @@ x | type | src | info
 `1` | `int` | `max_pages` | Number of pages of physical memory. [⌘](https://linux.die.net/man/3/sysconf)
 `2` | `int` | `num_cpus` | Number of processors currently online. [⌘](https://linux.die.net/man/3/sysconf)
 `3` | `int` | `page_size` | Size of a page in bytes. [⌘](https://linux.die.net/man/3/sysconf)
+
+## `event: hello`
+
+just a test event.
+
+> sent on every interval.
+
+```
+data: world
+```
+
+x | type | src | info
+-|-|-|-
+`0` | `string` | - | Always "world".
